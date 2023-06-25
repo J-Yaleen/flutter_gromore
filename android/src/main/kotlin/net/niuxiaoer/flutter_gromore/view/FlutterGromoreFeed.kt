@@ -83,7 +83,7 @@ class FlutterGromoreFeed(
     }
 
     override fun dispose() {
-        FlutterGromoreFeedCache.removeCacheFeedAd(cachedAdId)
+        removeAdView()
     }
 
     override fun onAdClick() {

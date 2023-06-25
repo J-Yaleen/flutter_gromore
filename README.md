@@ -19,7 +19,7 @@
 - ✅ 开屏广告
 - ✅ 插屏广告
 - ✅ 信息流广告
-- 🔲 Banner广告
+- ✅  Banner广告
 - ✅ 激励广告
 
 ## 2.0版本特性
@@ -338,6 +338,7 @@ if (interstitialId.isNotEmpty) {
 
 - 先加载广告id，成功后再渲染展示
 - 渲染成功回调中(onRenderSuccess)提供了一个参数，表示渲染后的广告高度，可以用来动态控制组件显示与否
+- 广告加载成功后会存放在内存当中，当广告不再展示时（用户主动关闭、某种条件触发关闭等场景）开发者不需要手动移除缓存中的广告，因为插件内部在销毁时会进行处理。（当然也提供了`removeCacheFeedAd`方法来手动移除）
 - 具体使用参考example
 
 2. 使用
@@ -453,6 +454,62 @@ Future<void> showRewardAd(String rewardId) async {
 | onRewardVerify    | 激励视频播放完毕，验证是否有效发放奖励的回调      | 参数 verify 表示是否验证成功 |
 | onSkippedVideo    | 跳过视频播放                                      |                              |
 
+### Banner广告
+
+1. 说明
+
+- 不需要加载广告id
+- 高度为申请广告位时选择的高度
+- 具体使用参考example
+
+2. 使用
+
+```dart
+SizedBox(
+  height: _height,
+  child: GromoreBannerView(
+    creationParams: {"adUnitId": GroMoreAdConfig.bannerId, "height": _bannerHeight.toString()},
+    callback: GromoreBannerCallback(onRenderSuccess: () {
+      print("GromoreBannerView | onRenderSuccess");
+      setState(() {
+        _height = _bannerHeight;
+      });
+    }, onSelected: () {
+      setState(() {
+        _show = false;
+      });
+    }, onLoadError: () {
+      setState(() {
+        _show = false;
+      });
+    }, onAdTerminate: () {
+      setState(() {
+        _show = false;
+      });
+    })),
+)
+```
+
+3. 配置（GromoreFeedConfig）
+
+| 参数名   | 说明                           | 必填 |
+| -------- | ------------------------------ | ---- |
+| adUnitId | 信息流广告位id                 | 是   |
+| width    | 宽度，默认宽度占满。String类型 | 否   |
+| height   | 高度，默认为150。String类型    | 否   |
+
+4. 回调（GromoreBannerCallback，命名和 **Android** 聚合文档基本一致）
+
+| 回调方法名      | 说明                          | 备注      |
+| --------------- | ----------------------------- | --------- |
+| onAdClick       | banner广告点击                |           |
+| onAdShow        | banner广告展示，仅Android可用 |           |
+| onRenderFail    | 模板渲染失败                  |           |
+| onRenderSuccess | 模板渲染成功                  |           |
+| onSelected      | 用户选择不喜欢原因            |           |
+| onAdTerminate   | 进程被终止                    | 仅iOS可用 |
+| onLoadError     | 广告加载失败                  |           |
+
 ## 问题
 
 1. iOS端的开屏广告只能使用`FlutterGromore.showSplashAd`进行，如果在此时同时加载插屏广告，可能会导致插屏广告出现在开屏广告上方
@@ -478,3 +535,7 @@ Future<void> showRewardAd(String rewardId) async {
 > 牛小二招聘前端
 
 牛小二招聘是一款致力为国内物流蓝领提供靠谱的求职招聘服务平台，全网累计拥有数百万会员用户，每日实时更新司机、押运员、搬卸工、快递员招工及牛人信息，司机招聘与技术牛人涵盖挂车、叉车司机、客车司机、铲车司机、罐车司机、拖车司机及货运车司机等，求职者和雇主可挑选匹配沟通，提高人岗匹配率，降低沟通成本
+
+### 招聘
+
+正在持续招聘2年经验以上的前端工程师，base成都，感兴趣的话请把简历发送到邮箱：jianglinqi@niuxiaoer.net，备注下github。我们主要是做蓝领行业的招聘，产品包括牛小二招聘APP、牛小二招聘小程序等，总用户数超千万，DAU几十万~
