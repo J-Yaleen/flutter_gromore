@@ -48,7 +48,30 @@ class FlutterGromoreReward(
 
     override fun onAdShow() {
         Log.d(TAG, "onAdShow")
-        postMessage("onAdShow")
+         //获取展示后广告信息
+        val ecpmInfo: MutableMap<String, Any?> = mutableMapOf()
+        if (mttRewardAd?.mediationManager != null) {
+            var showEcpm = mttRewardAd?.mediationManager?.getShowEcpm();
+            if(showEcpm!==null) {
+                ecpmInfo["sdkName"] = showEcpm.getSdkName()
+                ecpmInfo["customSdkName"] = showEcpm.getCustomSdkName()
+                ecpmInfo["slotId"] = showEcpm.getSlotId()
+                ecpmInfo["ecpm"] = showEcpm.getEcpm()
+                ecpmInfo["reqBiddingType"] = showEcpm.getReqBiddingType()
+                ecpmInfo["errorMsg"] = showEcpm.getErrorMsg()
+                ecpmInfo["requestId"] = showEcpm.getRequestId()
+                ecpmInfo["ritType"] = showEcpm.getRitType()
+                ecpmInfo["abTestId"] = showEcpm.getAbTestId()
+                ecpmInfo["scenarioId"] = showEcpm.getScenarioId()
+                ecpmInfo["segmentId"] = showEcpm.getSegmentId()
+                ecpmInfo["channel"] = showEcpm.getChannel()
+                ecpmInfo["subChannel"] = showEcpm.getSubChannel()
+                ecpmInfo["customData"] = showEcpm.getCustomData()
+                 
+            
+            }
+        }
+        postMessage("onAdShow",mapOf("ecpmInfo" to ecpmInfo))
     }
 
     // 广告的下载bar点击回调，非所有广告商的广告都会触发
