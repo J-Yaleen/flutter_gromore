@@ -3,7 +3,7 @@ import 'package:flutter_gromore/types.dart';
 
 class GromoreRewardCallback extends GromoreBaseAdCallback {
   /// 广告的展示回调
-  final GromoreVoidCallback? onAdShow;
+  final void Function(Map showEcpm)? onAdShow;
 
   /// 广告的下载bar点击回调，非所有广告商的广告都会触发
   final GromoreVoidCallback? onAdVideoBarClick;
@@ -36,7 +36,7 @@ class GromoreRewardCallback extends GromoreBaseAdCallback {
   @override
   void exec(String callbackName, [arguments]) {
     if (callbackName == "onAdShow") {
-      onAdShow?.call();
+      onAdShow?.call(arguments["ecpmInfo"]);
     } else if (callbackName == "onAdVideoBarClick") {
       onAdVideoBarClick?.call();
     } else if (callbackName == "onAdClose") {
